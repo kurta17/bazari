@@ -1,9 +1,7 @@
-from flask import Flask, Blueprint
-from flask import Flask, flash, redirect, render_template, request, session, url_for
-from flask_login import LoginManager
+# views.py
+from flask import Blueprint, render_template
 
-
-bp = Blueprint('users',__name__,template_folder='templates')
+bp = Blueprint('users', __name__, template_folder='templates')
 
 @bp.route('/login')
 def login():
