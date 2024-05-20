@@ -3,7 +3,11 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from flask_login import LoginManager
 
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 login_manager = LoginManager()
 #coment
+
+if __name__ == '__main__':
+    app.run(debug=True, port=4900)
