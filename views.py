@@ -1,8 +1,18 @@
 # views.py
-from flask import Blueprint, render_template
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import LoginManager, UserMixin, login_user
+from wtforms import StringField, PasswordField, SubmitField
+from flask_wtf import FlaskForm
+from flask_login import login_manager
+from user import User
 
-users = {'kere':{'password': '12345',"email": '123'}}
+
+users = {'kurta@gmail.com': {'password': '1234', 'name': 'Kurta'}}
+
 bp = Blueprint('users', __name__, template_folder='templates')
+
+login_manager = LoginManager()
+
 
 @bp.route('/')
 def home():
@@ -11,8 +21,23 @@ def home():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        if email in users:
+            user = User(email, users[email])
+            
+            if user.password ==  password:
+                login_user(user)
+                flash('Logged in successfully!', 'success')
+                return redirect(url_for('users.home'))
+            else:
+                flash('Incorrect password!', 'danger')
+        else:
+            flash('User does not exist!', 'danger')
     
+    return render_template('users.login.html')    
 
 @bp.route('/groups', methods=['GET', 'POST'])
 #@require_login
