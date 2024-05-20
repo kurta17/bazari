@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from views import bp as users_bp
 
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 login_manager = LoginManager()
