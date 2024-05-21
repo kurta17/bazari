@@ -63,13 +63,13 @@ def logout():
     return redirect(url_for('users.home'))
 
 @bp.route('/groups', methods=['GET', 'POST'])
-#@require_login
+@login_required
 def groups():
     return render_template('groups.html')
 
 
 @bp.route('/add_group', methods=['GET', 'POST'])
-#@require_login
+@login_required
 def add_group():
     return render_template('add_group.html')
 

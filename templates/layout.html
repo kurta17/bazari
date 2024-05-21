@@ -16,6 +16,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border: none;
             border-radius: 8px;
+            margin-bottom: 30px;
         }
         .card-title {
             margin-bottom: 20px;
@@ -35,6 +36,20 @@
         .nav-link {
             font-size: 1.1rem;
         }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .alert {
+            margin-top: 20px;
+        }
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -45,24 +60,29 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.home') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.groups') }}">Groups</a>
-                </li>
-                <li class="nav-item">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.groups') }}">Groups</a>
+                    </li>
                     <a class="nav-link" href="{{ url_for('users.add_group') }}">Add Group</a>
-                </li>
-                <li class="nav-item"> 
-                    <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>     
-                </li>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -74,10 +94,20 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
+        <div class="card">
+            <div class="card-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">© 2024 Bazari. All rights reserved.</span>
+        </div>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+    </body>
 </html>
+
