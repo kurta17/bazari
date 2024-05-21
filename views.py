@@ -1,19 +1,35 @@
 # views.py
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import LoginManager, UserMixin, login_user
+from flask_login import LoginManager, UserMixin, login_user, logout_user
 from wtforms import StringField, PasswordField, SubmitField
 from flask_wtf import FlaskForm
 from flask_login import login_manager
-from user import User, UserRegistration, load_users_from_file, save_users_to_file
+from user import User, UserRegistration
 import json
+from flask_login import login_required
 
-# users = {'kurta@gmail.com': {'password': '1234', 'name': 'Kurta'}}
 
 bp = Blueprint('users', __name__, template_folder='templates')
 
 login_manager = LoginManager()
 
+initial_users = {'kurta@gmail.com': {'password': '1234', 'name': 'Kurta'}}
+
+
+def load_users_from_file():
+    try:
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+    except:
+        users = initial_users
+
+    return users
+
 users = load_users_from_file()
+
+def save_users_to_file():
+    with open('users.json', 'w') as f:
+        json.dump(users, f)
 
 @bp.route('/')
 def home():
@@ -39,6 +55,12 @@ def login():
     
     return render_template('login.html')
 
+
+@bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('users.home'))
 
 @bp.route('/groups', methods=['GET', 'POST'])
 #@require_login
@@ -66,7 +88,7 @@ def register():
             users[email] = {'password': password, 'name': username}
             save_users_to_file()
             flash('Registration successful!', 'success')
-            return redirect(url_for('users.login'))
+            return redirect(url_for('users.home'))
     else:
         flash(f'Invalid input! {form.errors}', 'danger')
 
