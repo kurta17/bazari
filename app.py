@@ -1,10 +1,9 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_login import LoginManager, UserMixin
-from views import bp as users_bp
+from views import bp as users_bp, users
 from user import User
 
-users = {}
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -21,6 +20,11 @@ def get_user(id: str) -> User:
         return User(id, user_dict)
     else:
         return None
+    
+@app.route('/users')    
+def print_users():
+    print(users)
+    return users 
 
 
 app.register_blueprint(users_bp)
