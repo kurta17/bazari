@@ -19,7 +19,7 @@ def get_user(id: str) -> User:
     if user_dict:
         return User(id, user_dict)
     else:
-        return None
+        print('User not found')
     
 @app.route('/users')    
 def print_users():
