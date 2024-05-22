@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Group1",
+        "admin": "keree",
+        "messages": [
+            {
+                "author": "John",
+                "text": "Hello",
+                "created": "2024-05-22T09:12:47.596451",
+                "group": "Group1"
+            }
+        ]
+    }
+]
