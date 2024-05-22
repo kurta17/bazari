@@ -8,6 +8,7 @@ from user import User, UserRegistration
 import json
 from flask_login import login_required
 
+groups = {'python': {'creator':'kere'}}
 
 bp = Blueprint('users', __name__, template_folder='templates')
 
