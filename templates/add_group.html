@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Group</title>
+    <!-- Include Bootstrap CSS for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    fjieirojfpetpgov,typkh5ph          46phkp4gt
+    <div class="container mt-5">
+        <h2 class="mb-4">Add Group</h2>
+        <form action="{{ url_for('users.add_group') }}" method="POST">
+            <div class="form-group">
+                <label for="group_name">Group Name</label>
+                <input type="text" class="form-control" id="group_name" name="group_name" required>
+            </div>
+            <div class="form-group">
+                <label for="admin">Admin Name</label>
+                <input type="text" class="form-control" id="admin" name="admin" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Group</button>
+        </form>
+        <a href="{{ url_for('users.groups') }}" class="btn btn-secondary mt-3">Back to Groups</a>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

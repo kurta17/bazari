@@ -1,22 +1,14 @@
-# views.py
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import LoginManager, UserMixin, login_user, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user
 from wtforms import StringField, PasswordField, SubmitField
 from flask_wtf import FlaskForm
 from flask_login import login_manager
 from user import User, UserRegistration
 import json
 from flask_login import login_required
-from model import Group,MessageBoard,Message, add_message_to_group
+from model import Group, MessageBoard, Message, create_group, create_message
 
-
-
-message1 = Message('Hello', 'Kurta', datetime.now(), 'python')
-message2 = Message('Hi', 'Kurta', datetime.now(), 'java')
-group1 = Group('python',  'kere',  [message1])
-group2 = Group('java', 'kere', [message2, message1])
-initial_groups = MessageBoard([group1, group2])
 
 bp = Blueprint('users', __name__, template_folder='templates')
 
@@ -38,6 +30,16 @@ users = load_users_from_file()
 def save_users_to_file():
     with open('users.json', 'w') as f:
         json.dump(users, f)
+
+# Load initial groups from file
+def load_initial_groups():
+    try:
+        return MessageBoard.load_from_file('message_board.json')
+    except FileNotFoundError:
+        return MessageBoard()
+
+initial_groups = load_initial_groups()
+
 
 @bp.route('/')
 def home():
@@ -73,33 +75,44 @@ def logout():
 @bp.route('/groups', methods=['GET', 'POST'])
 @login_required
 def groups():
-    groups = initial_groups.groups
-    return render_template('groups.html', groups=groups)
+    load_gr = MessageBoard.load_from_file('message_board.json').groups
+    return render_template('groups.html', groups=load_gr)
 
 @bp.route('/group/<group_name>')
 @login_required
 def group_detail(group_name):
-    group = next((group for group in initial_groups.groups if group.name == group_name), None)
+    group = MessageBoard.load_from_file('message_board.json').groups
+    gr = next((group for group in group if group.name == group_name), None)
     if group is None:   
         return redirect(url_for('users.groups'))
-    return render_template('group_detail.html', group=group)
+    return render_template('group_detail.html', group=gr)
 
 
-@bp.route('/add_message', methods=['GET', 'POST'])
+@bp.route('/add_message/<group_name>', methods=['GET', 'POST'])
 @login_required
-def add_message():
+def add_message(group_name):
     if request.method == 'POST':
+        author = current_user.name
         text = request.form['text']
-        group_name = request.form['group']
-        author = request.form['author']
-        message = Message(text, author, datetime.now(), group_name)
-        add_message_to_group(initial_groups, group_name, message)
+        
+        create_message(text, author, group_name)
+        flash('Message added successfully!', 'success')
         return redirect(url_for('users.group_detail', group_name=group_name))
-    return render_template('add_message.html', groups=initial_groups.groups)
+    return render_template('group_detail.html', group=initial_groups.groups[0])
+        
 
 @bp.route('/add_group', methods=['GET', 'POST'])
 @login_required
 def add_group():
+    if request.method == 'POST':
+        group_name = request.form['group_name']
+        admin = request.form['admin']
+        result = create_group(group_name, admin)
+        if result == 'ok':
+            flash('Group created successfully!', 'success')
+            return redirect(url_for('users.groups'))
+        elif result == "Group already exists!":
+            flash('Group already exists!', 'danger')
     return render_template('add_group.html')
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -122,3 +135,5 @@ def register():
         flash(f'Invalid input! {form.errors}', 'danger')
 
     return render_template('register.html', form=form)
+
+

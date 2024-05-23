@@ -55,20 +55,16 @@
             </div>
         {% endfor %}
 
-        <form method="POST">
+        <form method="POST" action="{{ url_for('users.add_message', group_name=group.name) }}">
             <div class="form-group">
-            <label for="text">Add your message</label>
-            <textarea class="form-control" id="text" name="text" rows="3"></textarea>
-            <a href="{{ url_for('users.add_message') }}" class="btn btn-primary mt-2">send</a>
+                <label for="text">Add your message</label>
+                <textarea class="form-control" id="text" name="text" rows="3"></textarea>
+                <input type="submit" value="Send message">
 
-        </div>
+            </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <span class="text-muted">© 2024 Bazari. All rights reserved.</span>
-        </div>
-    </footer>
+    
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

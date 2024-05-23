@@ -63,17 +63,23 @@ class MessageBoard():
             groups = [Group.from_json(group_data) for group_data in groups_data]
             return MessageBoard(groups=groups)
 
+def create_message(text: str, author: str, group_name: str) -> Message:
+    new_message = Message(text, author, datetime.utcnow(), group_name)
+    gr = MessageBoard.load_from_file('message_board.json')
+    for group in gr.groups:
+        if group.name == group_name:
+            group.messages.append(new_message)
+    gr.save_to_file('message_board.json')
+    
+    return 
 
-# # Example usage
-# new_message = Message('Hello', 'John', datetime.utcnow(), 'Group1')
-# new_group = Group(name='Group1',admin='keree', messages=[new_message])
-# board = MessageBoard(groups=[new_group])
+def create_group(name: str, admin: str) -> Group:
+    gr = MessageBoard.load_from_file('message_board.json')
+    if name in [group.name for group in gr.groups]:
+        return "Group already exists!"
+    new_group = Group(name, admin)
+    gr.groups.append(new_group)
+    gr.save_to_file('message_board.json')
+    return "ok"
 
-# # Save to file
-# board.save_to_file('message_board.json')
 
-# # Load from file
-# loaded_board = MessageBoard.load_from_file('message_board.json')
-# add_message_to_group(loaded_board, 'Group1', Message('Another message', 'Alice', datetime.utcnow(), 'Group1'))
-
-# print(loaded_board.groups[0].messages[1].text)  
