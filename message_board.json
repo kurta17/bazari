@@ -62,21 +62,25 @@
     {
         "name": "fre",
         "admin": "rferf",
-        "messages": []
+        "messages": [
+            {
+                "author": "Kurta",
+                "text": "fkruhwybec",
+                "created": "2024-05-23T09:17:32.622472",
+                "group": "fre"
+            },
+            {
+                "author": "Kurta",
+                "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "created": "2024-05-23T09:17:59.549313",
+                "group": "fre"
+            }
+        ]
     },
     {
         "name": "fcwefdx",
         "admin": "wfecfwrfc",
         "messages": []
-    },
-    {
-        "name": "dewrf",
-        "admin": "rdwed4r",
-        "messages": []
-    },
-    {
-        "name": "11111111we",
-        "admin": "wfefew",
-        "messages": []
     }
+    
 ]

@@ -98,7 +98,7 @@ def add_message(group_name):
         create_message(text, author, group_name)
         flash('Message added successfully!', 'success')
         return redirect(url_for('users.group_detail', group_name=group_name))
-    return render_template('group_detail.html', group=initial_groups.groups[0])
+    return render_template('group_detail.html', group=initial_groups.groups)
         
 
 @bp.route('/add_group', methods=['GET', 'POST'])
