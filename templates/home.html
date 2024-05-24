@@ -1,153 +1,39 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .container {
-            padding-top: 50px;
-        }
-        .jumbotron {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            padding: 40px;
-        }
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        .card-title {
-            margin-bottom: 20px;
-            color: #007bff;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            width: auto;
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #007bff;
-        }
-        .nav-link {
-            font-size: 1.1rem;
-            color: #007bff;
-        }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            text-align: center;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-        .alert {
-            margin-top: 20px;
-        }
-        .navbar {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <a class="navbar-brand" href="{{ url_for('users.home') }}">Bazari</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.groups') }}">Groups</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.add_group') }}">Add Group</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-    <div class="container">
-        <!-- {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %} -->
-        <div class="jumbotron text-center">
-            {% if current_user.is_authenticated %}
-                <h1 class="display-4">Welcome back, {{ current_user.name }}!</h1>
-                <p class="lead">Explore new groups, create your own, and connect with friends.</p>
-                <hr class="my-4">
-                <p>Get started by viewing available groups or creating a new one.</p>
-            {% else %}
-                <h1 class="display-4">Welcome to Bazari!</h1>
-                <p class="lead">A place to join and create groups, connect with others, and share your interests.</p>
-                <hr class="my-4">
-                <p>To get started, you can register for an account or log in if you already have one.</p>
-                <a class="btn btn-primary btn-lg" href="{{ url_for('users.register') }}" role="button">Register</a>
-                <a class="btn btn-secondary btn-lg" href="{{ url_for('users.login') }}" role="button">Login</a>
-            {% endif %}
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Join a Group</h5>
-                        <p class="card-text">Discover and join groups that match your interests.</p>
-                        <a href="{{ url_for('users.groups') }}" class="btn btn-primary">View Groups</a>
-                    </div>
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="jumbotron text-center">
+        {% if current_user.is_authenticated %}
+            <h1 class="display-4">Welcome back, {{ current_user.name }}!</h1>
+            <p class="lead">Explore new groups, create your own, and connect with friends.</p>
+            <hr class="my-4">
+            <p>Get started by viewing available groups or creating a new one.</p>
+        {% else %}
+            <h3 class="display-4">Welcome to Bazari!</h3>
+            <h2 class="lead">A place to join and create groups, connect with others, and share your interests.</h2>
+            <hr class="my-6">
+            <h4>To get started, you can register for an account or log in if you already have one.</h4>
+            <a class="btn btn-primary mt-3" href="{{ url_for('users.register') }}" role="button">Register</a>
+            <a class="btn btn-primary mt-3" href="{{ url_for('users.login') }}" role="button">Login</a>
+        {% endif %}
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Join a Group</h5>
+                    <p class="card-text">Discover and join groups that match your interests.</p>
+                    <a href="{{ url_for('users.groups') }}" class="btn btn-primary">View Groups</a>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Create a Group</h5>
-                        <p class="card-text">Create your own group and invite others to join.</p>
-                        <a href="{{ url_for('users.add_group') }}" class="btn btn-primary">Add Group</a>
-                    </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Create a Group</h5>
+                    <p class="card-text">Create your own group and invite others to join.</p>
+                    <a href="{{ url_for('users.add_group') }}" class="btn btn-primary">Add Group</a>
                 </div>
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <span class="text-muted">© 2024 Bazari. All rights reserved.</span>
-        </div>
-    </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}

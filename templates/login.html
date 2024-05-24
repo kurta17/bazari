@@ -8,16 +8,46 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .login-container {
-            max-width: 400px;
+            max-width: 500px;
             margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .login-btn {
             background-color: #28a745;
             color: white;
+            border-radius: 25px;
+            width: 100%;
+        }
+        .login-btn:hover {
+            background-color: #218838;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 25px;
+            padding: 20px;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #28a745;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        .form-text {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .form-text a {
+            color: #007bff;
+        }
+        .form-text a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -36,6 +66,9 @@
                 </div>
                 <button type="submit" class="btn login-btn btn-block">Log In</button>
             </form>
+            <p class="form-text">
+                Don't have an account? <a href="{{ url_for('users.register') }}">Sign up here</a>
+            </p>
         </div>
     </div>
 
