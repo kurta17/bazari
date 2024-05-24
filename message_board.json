@@ -34,64 +34,6 @@
                 "group": "cars"
             }
         ]
-    },
-    {
-        "name": "mateee",
-        "admin": "kurta",
-        "messages": [
-            {
-                "author": "John",
-                "text": "Heeeeeeeeeeeeeeeeeeeeeello",
-                "created": "2024-05-23T06:59:57.505990",
-                "group": "mateee"
-            },
-            {
-                "author": "mate berishvili",
-                "text": "Heeeeeeeefrwfreeeello",
-                "created": "2024-05-23T07:01:05.213194",
-                "group": "mateee"
-            },
-            {
-                "author": "mate berishvili",
-                "text": "Heeeeeef354wfrdeeeeeeeeello",
-                "created": "2024-05-23T07:01:22.645567",
-                "group": "mateee"
-            }
-        ]
-    },
-    {
-        "name": "fre",
-        "admin": "rferf",
-        "messages": [
-            {
-                "author": "Kurta",
-                "text": "fkruhwybec",
-                "created": "2024-05-23T09:17:32.622472",
-                "group": "fre"
-            },
-            {
-                "author": "Kurta",
-                "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                "created": "2024-05-23T09:17:59.549313",
-                "group": "fre"
-            }
-        ]
-    },
-    {
-        "name": "fcwefdx",
-        "admin": "wfecfwrfc",
-        "messages": []
-    },
-    {
-        "name": "iuhdfbwrucbw",
-        "admin": "nifrjchbs",
-        "messages": [
-            {
-                "author": "Kurta",
-                "text": "fnwrbfkjcnwrs",
-                "created": "2024-05-24T05:32:31.204914",
-                "group": "iuhdfbwrucbw"
-            }
-        ]
     }
+
 ]
