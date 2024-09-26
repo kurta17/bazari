@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_login import LoginManager
 import redis
@@ -6,8 +7,11 @@ from db_utils import get_db_connection
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
-
+redis_client = redis.StrictRedis(
+    host=os.getenv('REDIS_HOST', 'redis'), 
+    port=int(os.getenv('REDIS_PORT', 6379)),
+    db=0
+)
 login_manager = LoginManager(app)
 login_manager.login_view = 'users.login'
 

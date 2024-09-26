@@ -10,8 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres-data-bazari:/var/lib/postgresql/data
-    networks:
-      - app-network
+
 
   redis:
     image: redis:6
@@ -19,8 +18,6 @@ services:
       - "6379:6379"
     volumes:
       - ./redis-data-bazari:/data
-    networks:
-      - app-network
       
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -28,10 +25,24 @@ services:
       - "8081:8081"
     environment:
       REDIS_HOSTS: local:redis:6379
-    networks:
-      - app-network
+    
+
+  flask-app:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DB_HOST: postgres
+      DB_NAME: bazari
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8000:8000"
 
 
-networks:
-  app-network:
-    driver: bridge
+volume:
+  postgres-data-bazari:
+  redis-data-bazari:
