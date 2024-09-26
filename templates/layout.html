@@ -9,9 +9,7 @@
         body {
             background-color: #f8f9fa;
         }
-        .container {
-            margin-top: 50px;
-        }
+        
         .card {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border: none;
@@ -70,6 +68,10 @@
                     <a class="nav-link" href="{{ url_for('users.add_group') }}">Add Group</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.profile') }}">Profile</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
                     </li>
                 {% else %}
@@ -82,6 +84,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
                     </li>
+
                 {% endif %}
             </ul>
         </div>

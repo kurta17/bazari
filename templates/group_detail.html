@@ -2,23 +2,17 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4">{{ group.name }}</h1>
+    <h1 class="text-center mb-4">{{ group[1] }}</h1>
 
-    <!-- Display messages -->
-    {% for message in group.messages %}
-        <div class="card mb-3 bg-light">
-            <div class="card-body">
-                <h5 class="card-title text-primary">{{ message.author }}</h5>
-                <p class="card-text ">{{ message.text }}</p>
-                <p class="card-text "><small class="text-muted">{{ message.created.strftime('%Y-%m-%d %H:%M:%S') }}</small></p>
-            </div>
-        </div>
-    {% endfor %}
+    <!-- Message container -->
+    <div id="message-container">
+        <!-- Messages will be loaded here by JavaScript -->
+    </div>
 
     <!-- Add new message form -->
     <div class="card">
         <div class="card-body">
-            <form method="POST" action="{{ url_for('users.add_message', group_name=group.name) }}">
+            <form method="POST" action="{{ url_for('users.add_message', group_name=group[1]) }}">
                 <div class="form-group">
                     <label for="text">Your Message</label>
                     <textarea class="form-control" id="text" name="text" rows="3" placeholder="Type your message here..."></textarea>
@@ -28,4 +22,43 @@
         </div>
     </div>
 </div>
+
+<script>
+// Function to fetch and update messages
+function loadMessages() {
+    fetch("{{ url_for('users.get_group_messages', group_name=group[1]) }}")
+        .then(response => response.json())
+        .then(data => {
+            const messageContainer = document.getElementById('message-container');
+            messageContainer.innerHTML = ''; // Clear the container
+
+            data.forEach(message => {
+                const messageCard = document.createElement('div');
+                messageCard.classList.add('card', 'mb-3', 'bg-light');
+                
+                // Align message based on author
+                if (message.author === "{{ current_user.name }}") {
+                    messageCard.classList.add('text-right');
+                } else {
+                    messageCard.classList.add('text-left');
+                }
+
+                messageCard.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">${message.author}</h5>
+                        <p class="card-text">${message.text}</p>
+                        <p class="card-text"><small class="text-muted">${message.created}</small></p>
+                    </div>
+                `;
+                messageContainer.appendChild(messageCard);
+            });
+        });
+}
+
+// Call loadMessages every 1 second
+setInterval(loadMessages, 1000);
+
+// Load messages when the page loads
+window.onload = loadMessages;
+</script>
 {% endblock %}

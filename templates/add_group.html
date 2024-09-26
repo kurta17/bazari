@@ -8,10 +8,6 @@
             <label for="group_name">Group Name</label>
             <input type="text" class="form-control" id="group_name" name="group_name" required>
         </div>
-        <div class="form-group">
-            <label for="admin">Admin Name</label>
-            <input type="text" class="form-control" id="admin" name="admin" required>
-        </div>
         <button type="submit" class="btn btn-primary">Add Group</button>
     </form>
     <a href="{{ url_for('users.groups') }}" class="btn btn-secondary mt-3">Back to Groups</a>

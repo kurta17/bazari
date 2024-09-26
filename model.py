@@ -1,85 +1,32 @@
-import json
-from datetime import datetime
+from flask_login import UserMixin
+from wtforms import PasswordField, StringField, SubmitField
+from wtforms.validators import DataRequired, Email
+from flask_wtf import FlaskForm
+from db_utils import get_db_connection
 
-class Message():
-    def __init__(self, text: str, author: str, created: datetime, group: str):
-        self.text = text
-        self.author = author
-        self.created = created
-        self.group = group
-
-    def as_json(self):
-        return {
-            "author": self.author,
-            "text": self.text,
-            "created": self.created.isoformat(),
-            "group": self.group
-        }
-    
-    @staticmethod
-    def from_json(data):
-        return Message(
-            text=data['text'],
-            author=data['author'],
-            created=datetime.fromisoformat(data['created']),
-            group=data['group']
-        )
-
-
-class Group():
-    def __init__(self, name: str,  admin : str , messages: list = None):
+class User(UserMixin):
+    def __init__(self, id, gmail, password, name):
+        self.id = id
+        self.gmail = gmail
+        self.password = password
         self.name = name
-        self.admin = admin
-        self.messages = messages if messages else []
-
-    def as_json(self):
-        return {
-            "name": self.name,
-            "admin": self.admin,
-            "messages": [message.as_json() for message in self.messages]
-        }
-
-    @staticmethod
-    def from_json(data):
-        messages = [Message.from_json(msg) for msg in data['messages']]
-        return Group(name=data['name'], admin=data['admin'], messages=messages)
 
 
-class MessageBoard():
-    def __init__(self, groups: list = None):
-        self.groups = groups if groups else []
+class UserRegistration(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField('Register')
 
-    def add_group(self, group: Group):
-        self.groups.append(group)
+def load_user(user_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
 
-    def save_to_file(self, filename: str):
-        with open(filename, 'w') as f:
-            json.dump([group.as_json() for group in self.groups], f, indent=4)
-
-    @staticmethod
-    def load_from_file(filename: str):
-        with open(filename, 'r') as f:
-            groups_data = json.load(f)
-            groups = [Group.from_json(group_data) for group_data in groups_data]
-            return MessageBoard(groups=groups)
-
-def create_message(text: str, author: str, group_name: str) -> Message:
-    new_message = Message(text, author, datetime.utcnow(), group_name)
-    gr = MessageBoard.load_from_file('message_board.json')
-    for group in gr.groups:
-        if group.name == group_name:
-            group.messages.append(new_message)
-    gr.save_to_file('message_board.json')
-    
-    return 
-
-def create_group(name: str, admin: str) -> Group:
-    gr = MessageBoard.load_from_file('message_board.json')
-    if name in [group.name for group in gr.groups]:
-        return "Group already exists!"
-    new_group = Group(name, admin)
-    gr.groups.append(new_group)
-    gr.save_to_file('message_board.json')
-    return "ok"
-
-
+    if user:
+        return User(id=user[0], gmail=user[1], password=user[2], name=user[3])
+    return None
