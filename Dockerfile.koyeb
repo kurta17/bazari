@@ -1,0 +1,11 @@
+# Use Koyeb's Docker Compose image as the base
+FROM koyeb/docker-compose
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the entire project into the /app directory in the image
+COPY . .
+
+# Ensure that the entrypoint to Docker Compose is set
+CMD ["docker-compose", "up"]
