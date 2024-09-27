@@ -209,29 +209,41 @@ def add_group():
 
     return render_template('add_group.html')
 
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = UserRegistration()
-
+    
     if form.validate_on_submit():
         email = form.email.data
-        password = form.password.data
-        confirm_password = form.confirm_password.data
         username = form.username.data
+        hashed_password = form.password.data  # Replace with actual password hashing logic
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-        if password != confirm_password:
-            flash('Passwords do not match!', 'danger')
+        # Check if the email already exists
+        cur.execute("SELECT COUNT(*) FROM users WHERE gmail = %s", (email,))
+        email_exists = cur.fetchone()[0]
+
+        if email_exists:
+            flash('Email already exists. Please choose a different email.', 'danger')
         else:
-            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+            # Proceed with user registration
+            try:
+                cur.execute("INSERT INTO users (gmail, password, name) VALUES (%s, %s, %s)", 
+                            (email, hashed_password, username))
+                conn.commit()
+                flash('Registration successful! You can now log in.', 'success')
+                return redirect(url_for('users.login'))  # Redirect to login page
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'danger')
+        
+        cur.close()
+        conn.close()
 
-            conn = get_db_connection()
-            cur = conn.cursor()
-            cur.execute("INSERT INTO users (gmail, password, name) VALUES (%s, %s, %s)", (email, hashed_password, username))
-            conn.commit()
-            cur.close()
-            conn.close()
-
-            flash('Registration successful!', 'success')
-            return redirect(url_for('users.login'))
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f'{field.capitalize()}: {error}', 'danger')
 
     return render_template('register.html', form=form)
